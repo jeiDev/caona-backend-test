@@ -2,22 +2,14 @@
 
 namespace api\modules\admin\controllers;
 
-use app\models\Clients;
 use yii;
-use yii\filters\AccessControl;
-use yii\rest\ActiveController;
+use app\models\Clients;
+use api\base\BaseController;
 
-class ClientsController extends ActiveController
+class ClientsController extends BaseController
 {
-
-    public $modelClass = Clients::class;
-    public $serializer = [
-        'class' => 'yii\rest\Serializer',
-        'collectionEnvelope' => 'items'
-    ];
-
-    public function init(){
-        parent::init();
-        \Yii::$app->user->enableSession = false;
+    public function actionIndex($id = null)
+    {
+        $this->setActionIndex(Clients::class, [], $id);
     }
 }

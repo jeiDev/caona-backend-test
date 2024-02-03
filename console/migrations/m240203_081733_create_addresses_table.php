@@ -14,7 +14,6 @@ class m240203_081733_create_addresses_table extends Migration
     {
         $this->createTable('{{%addresses}}', [
             'id' => $this->primaryKey(),
-            'uuid' => $this->string()->notNull(),
             'address' => $this->text(),
             'city' => $this->text(),
             'state' => $this->text(),
