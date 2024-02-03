@@ -1,0 +1,6 @@
+
+Options -Indexes
+IndexIgnore */*
+Options FollowSymlinks
+RewriteEngine on
+RewriteRule ^(.+)?$ api/web/$1 [L,PT]
