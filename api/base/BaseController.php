@@ -149,6 +149,8 @@ class BaseController extends Controller
         $model = $this->findModel($model, $id);
         
         if(!$model){
+            Yii::$app->response->statusCode = 404;
+
             return $this->asJson([
                 'errors' => [
                     'message' => ['Data not found']
