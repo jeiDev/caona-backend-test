@@ -64,19 +64,24 @@ class BaseController extends Controller
     protected function onGet($model, $properties = [], $id = null){
         if($id){
             $modelDB = $this->findModel($model, $id);
+            if(!$modelDB){
+                Yii::$app->response->statusCode = 404;
+                return $this->asJson([
+                    'errors' => [
+                        'message' => ['Data not found']
+                    ]
+                ]);
+            }
+
             $data = $modelDB;
 
             if($properties['relationship']){
                 $data = array_merge($data->attributes, $properties['relationship']($id));
             }
 
-            Yii::$app->response->statusCode = $modelDB ? 200 : 404;
-            return $this->asJson($modelDB ? [
+            Yii::$app->response->statusCode = 200;
+            return $this->asJson([
                 'data' => $data
-            ] : [
-                'errors' => [
-                    'message' => ['Data not found']
-                ]
             ]);
         }
 
