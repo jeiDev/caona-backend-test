@@ -10,7 +10,7 @@ return [
     'id' => 'app-api',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'homeUrl' => '/test-caona/',
+    'homeUrl' => '//',
     'controllerNamespace' => 'api\controllers',
     'modules' => [
         'mnt' => [
@@ -20,7 +20,7 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-api',
-            'baseUrl' => '/test-caona',
+            'baseUrl' => '/',
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser'
             ]
