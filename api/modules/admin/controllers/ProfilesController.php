@@ -11,7 +11,10 @@ class ProfilesController extends BaseController
     public function actionIndex($id = null)
     {
         $this->setActionIndex(Profiles::class, [
-            'client_id'
+            'unsets' => ['client_id'],
+            'deleteCascade' => function(){
+                
+            },
         ], $id);
     }
 }

@@ -11,7 +11,10 @@ class AddressesController extends BaseController
     public function actionIndex($id = null)
     {
         $this->setActionIndex(Addresses::class, [
-            'client_id'
+            'unsets' => ['client_id'],
+            'deleteCascade' => function(){
+                
+            }
         ], $id);
     }
 }

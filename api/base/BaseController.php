@@ -42,29 +42,40 @@ class BaseController extends Controller
         ];
     }
 
-    protected function setActionIndex($method, $unsets = [], $id = null)
+    protected function setActionIndex($method, $properties = [
+        'unsets' => [],
+        'deleteCascade' => null,
+        'relationship' => null
+    ], $id = null)
     {
         $verb = Yii::$app->request->getMethod();
         
         if ($verb === 'GET') {
-            $this->onGet($method, $id);
+            $this->onGet($method, $properties, $id);
         } elseif ($verb === 'POST') {
             $this->onActionCreate($method);
         } elseif ($verb === 'DELETE') {
-            $this->onDelete($method);
+            $this->onDelete($method, $properties['deleteCascade']);
         } elseif ($verb === 'PUT') {
-            $this->onActionUpdate($method, $unsets);
+            $this->onActionUpdate($method, $properties['unsets']);
         } 
     }
 
-    protected function onGet($model, $id = null){
+    protected function onGet($model, $properties = [], $id = null){
         if($id){
             $modelDB = $this->findModel($model, $id);
+            $data = $modelDB;
+
+            if($properties['relationship']){
+                $data = array_merge($data->attributes, $properties['relationship']($id));
+            }
 
             return $this->asJson($modelDB ? [
-                'data' => $modelDB
+                'data' => $data
             ] : [
-                'error' => 'Data not found'
+                'errors' => [
+                    'message' => ['Data not found']
+                ]
             ]);
         }
 
@@ -74,7 +85,7 @@ class BaseController extends Controller
             'totalCount' => $query->count(),
         ]);
 
-        $data = $query->orderBy('id')
+        $data = $query->orderBy(['created_at' => SORT_DESC])
             ->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
@@ -85,11 +96,14 @@ class BaseController extends Controller
         ]);
     }
 
-    protected function onDelete($model){
+    protected function onDelete($model, $deleteCascade){
         $id = Yii::$app->request->getBodyParam('id');
         $data = $this->findModel($model, $id);
 
         if($data){
+            if($deleteCascade){
+                $deleteCascade($id);
+            }
             $data->delete();
         }
 

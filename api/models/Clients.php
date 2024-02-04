@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\models\Addresses;
 
 /**
  * This is the model class for table "clients".
@@ -48,5 +49,10 @@ class Clients extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'deleted_at' => 'Deleted At',
         ];
+    }
+
+    public function getAddress()
+    {
+        return $this->hasMany(Addresses::class, ['client_id' => 'id']);
     }
 }
