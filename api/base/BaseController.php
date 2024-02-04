@@ -70,6 +70,7 @@ class BaseController extends Controller
                 $data = array_merge($data->attributes, $properties['relationship']($id));
             }
 
+            Yii::$app->response->statusCode = $modelDB ? 200 : 404;
             return $this->asJson($modelDB ? [
                 'data' => $data
             ] : [
@@ -107,6 +108,7 @@ class BaseController extends Controller
             $data->delete();
         }
 
+        Yii::$app->response->statusCode = $data ? 200 : 404;
         return $this->asJson([
             'deleted' => $data ? true : false
         ]);
@@ -114,6 +116,7 @@ class BaseController extends Controller
 
     protected function onActionView($model, $id){
         $model = $this->findModel($model, $id);
+        Yii::$app->response->statusCode = $model ? 200 : 404;
         return $this->asJson( $model ? [
             'data' => $model
         ] : [
@@ -139,6 +142,7 @@ class BaseController extends Controller
     protected function onActionUpdate($model, $unsets = []){
         $id = Yii::$app->request->getBodyParam('id');
         $model = $this->findModel($model, $id);
+        
         if(!$model){
             return $this->asJson([
                 'errors' => [
@@ -155,6 +159,7 @@ class BaseController extends Controller
 
         $updated = $model->load($data, '') && $model->save();
 
+        Yii::$app->response->statusCode = $updated ? 200 : 500;
         return $this->asJson([
             'data' => $model,
             'updated' => $updated,
