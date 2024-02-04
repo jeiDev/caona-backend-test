@@ -75,7 +75,7 @@ class BaseController extends Controller
 
             $data = $modelDB;
 
-            if($properties['relationship']){
+            if(isset($properties['relationship'])){
                 $data = array_merge($data->attributes, $properties['relationship']($id));
             }
 
